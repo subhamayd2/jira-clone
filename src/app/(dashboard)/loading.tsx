@@ -1,9 +1,9 @@
 import { Loader } from 'lucide-react';
 
-const Loading = () => (
-    <div className="flex items-center justify-center h-screen w-screen">
-        <Loader className="size-24 animate-spin text-muted-foreground" />
+const DashboardLoading = () => (
+    <div className="h-full flex items-center justify-center">
+        <Loader className="size-6 text-muted-foreground animate-spin" />
     </div>
 );
 
-export default Loading;
+export default DashboardLoading;

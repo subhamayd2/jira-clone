@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { Account, Client } from 'node-appwrite';
-import { AUTH_COOKIE } from '@/features/contants';
+import { AUTH_COOKIE } from '@/features/auth/contants';
 
 export const getCurrentUser = async () => {
   try {

@@ -1,24 +1,24 @@
 'use client';
 
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
-import { useForm } from 'react-hook-form';
-import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { FaGithub } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import z from 'zod';
 import DottedSepartor from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
   Card, CardContent, CardHeader, CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
   Form, FormControl, FormField, FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { loginSchema } from '@/features/auth/schemas';
+import { Input } from '@/components/ui/input';
 import useLogin from '@/features/auth/api/use-login';
+import { loginSchema } from '@/features/auth/schemas';
 
 function SignInCard() {
   const router = useRouter();
@@ -90,10 +90,10 @@ function SignInCard() {
               <DottedSepartor />
           </div>
           <CardContent className="p-7 flex flex-col gap-y-4">
-              <Button variant="secondary" size="lg" className="w-full" loading={isPending} icon={<FcGoogle className="mr-2 size-5" />}>
+              <Button variant="secondary" size="lg" className="w-full" disabled={isPending} icon={<FcGoogle className="mr-2 size-5" />}>
                   Login with Google
               </Button>
-              <Button variant="secondary" size="lg" className="w-full" loading={isPending} icon={<FaGithub className="mr-2 size-5" />}>
+              <Button variant="secondary" size="lg" className="w-full" disabled={isPending} icon={<FaGithub className="mr-2 size-5" />}>
                   Login with Github
               </Button>
           </CardContent>

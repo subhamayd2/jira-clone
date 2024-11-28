@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
 import QueryProvider from '@/components/query-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -20,6 +21,7 @@ export default function RootLayout({
       <html lang="en">
           <body className={cn(inter.className, 'antialiased min-h-screen')}>
               <QueryProvider>
+                  <Toaster visibleToasts={3} closeButton />
                   {children}
               </QueryProvider>
           </body>

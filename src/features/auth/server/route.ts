@@ -4,7 +4,7 @@ import { ID } from 'node-appwrite';
 import { setCookie, deleteCookie } from 'hono/cookie';
 import { loginSchema, signUpSchema } from '@/features/auth/schemas';
 import { createAdminClient } from '@/lib/appwrite';
-import { AUTH_COOKIE } from '@/features/contants';
+import { AUTH_COOKIE } from '@/features/auth/contants';
 import { sessionMiddleware } from '@/lib/session-middleware';
 
 const authRoute = new Hono()

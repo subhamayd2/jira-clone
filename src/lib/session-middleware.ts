@@ -9,7 +9,7 @@ import {
   type Users as UsersType,
   Models,
 } from 'node-appwrite';
-import { AUTH_COOKIE } from '@/features/contants';
+import { AUTH_COOKIE } from '@/features/auth/contants';
 
 type AdditionalContext = {
     Variables: {
