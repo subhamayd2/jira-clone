@@ -7,7 +7,7 @@ import { useUser } from '@/features/auth/api/use-user';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import useLogout from '@/features/auth/api/use-logout';
 
 function UserButton() {
@@ -60,7 +60,7 @@ function UserButton() {
                       <p className="text-xs text-neutral-500">{email ?? 'User'}</p>
                   </div>
               </div>
-              <DottedSepartor className="mb-1" />
+              <DottedSeparator className="mb-1" />
               <DropdownMenuItem
                   onClick={handleLogout}
                   className="h-10 flex items-center justify-center text-destructive font-medium cursor-pointer"

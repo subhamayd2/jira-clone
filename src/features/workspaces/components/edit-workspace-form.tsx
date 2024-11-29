@@ -8,7 +8,7 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -146,7 +146,7 @@ const EditWorkspaceForm = ({ onCancel, initialValues }: IEditWorkspaceFormProps)
                   </CardTitle>
               </CardHeader>
               <div className="px-7">
-                  <DottedSepartor />
+                  <DottedSeparator />
               </div>
               <CardContent className="p-7">
                   <Form {...form}>
@@ -237,7 +237,7 @@ const EditWorkspaceForm = ({ onCancel, initialValues }: IEditWorkspaceFormProps)
                                   )}
                               />
                           </div>
-                          <DottedSepartor className="py-7" />
+                          <DottedSeparator className="py-7" />
                           <div className="flex items-center justify-between">
                               <Button
                                   type="button"
@@ -272,7 +272,7 @@ const EditWorkspaceForm = ({ onCancel, initialValues }: IEditWorkspaceFormProps)
                               </Button>
                           </div>
                       </div>
-                      <DottedSepartor className="py-7" />
+                      <DottedSeparator className="py-7" />
                       <Button
                           className="w-fit ml-auto"
                           size="sm"
@@ -294,7 +294,7 @@ const EditWorkspaceForm = ({ onCancel, initialValues }: IEditWorkspaceFormProps)
                       <p className="text-sm text-muted-foreground">
                           Deleting a workspace is permanent and cannot be undone. It will delete all associated projects, tasks, and members.
                       </p>
-                      <DottedSepartor className="py-7" />
+                      <DottedSeparator className="py-7" />
                       <Button
                           className="w-fit ml-auto"
                           size="sm"

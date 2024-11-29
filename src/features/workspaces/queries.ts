@@ -3,14 +3,17 @@
 import {
   Query,
 } from 'node-appwrite';
+import { cookies } from 'next/headers';
 import { DATABASE_ID, MEMBERS_ID, WORKSPACES_ID } from '@/config';
 import { getMember } from '@/features/members/utils';
 import { createSessionClient } from '@/lib/appwrite';
+import { AUTH_COOKIE } from '@/features/auth/contants';
 import { Workspace } from './types';
 
 export const getWorkspaces = async () => {
+  const cookiesData = cookies().get(AUTH_COOKIE);
   try {
-    const { account, databases } = await createSessionClient();
+    const { account, databases } = await createSessionClient({ cookie: () => cookiesData });
 
     const user = await account.get();
 
@@ -41,8 +44,9 @@ interface IWorkspaceInfoProps {
 }
 
 export const getWorkspace = async ({ workspaceId }: IWorkspaceInfoProps) => {
+  const cookiesData = cookies().get(AUTH_COOKIE);
   try {
-    const { account, databases } = await createSessionClient();
+    const { account, databases } = await createSessionClient({ cookie: () => cookiesData });
 
     const user = await account.get();
 
@@ -65,8 +69,9 @@ interface IWorkspaceInfoProps {
   }
 
 export const getWorkspaceInfo = async ({ workspaceId }: IWorkspaceInfoProps) => {
+  const cookiesData = cookies().get(AUTH_COOKIE);
   try {
-    const { databases } = await createSessionClient();
+    const { databases } = await createSessionClient({ cookie: () => cookiesData });
 
     const workspace = await databases.getDocument<Workspace>(DATABASE_ID, WORKSPACES_ID, workspaceId);
 

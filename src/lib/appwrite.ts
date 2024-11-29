@@ -1,17 +1,17 @@
 import 'server-only';
 
 import {
-  Client, Account, Databases, Users,
+  Account,
+  Client,
+  Databases, Users,
 } from 'node-appwrite';
-import { cookies } from 'next/headers';
-import { AUTH_COOKIE } from '@/features/auth/contants';
 
-export const createSessionClient = async () => {
+export function createSessionClient({ cookie }: { cookie: () => {name: string, value: string} | undefined }) {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
 
-  const session = await cookies().get(AUTH_COOKIE);
+  const session = cookie();
 
   if (!session || !session.value) {
     throw new Error('Unauthorized');
@@ -27,7 +27,7 @@ export const createSessionClient = async () => {
       return new Databases(client);
     },
   };
-};
+}
 
 export const createAdminClient = () => {
   const client = new Client().setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)

@@ -11,7 +11,7 @@ import { createWorkspaceSchema } from '@/features/workspaces/schemas';
 import {
   Card, CardContent, CardHeader, CardTitle,
 } from '@/components/ui/card';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import {
   Form,
   FormControl, FormField, FormItem, FormLabel,
@@ -68,7 +68,7 @@ const CreateWorkspaceForm = ({ onCancel }: ICreateWorkspaceFormProps) => {
               </CardTitle>
           </CardHeader>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7">
               <Form {...form}>
@@ -159,7 +159,7 @@ const CreateWorkspaceForm = ({ onCancel }: ICreateWorkspaceFormProps) => {
                               )}
                           />
                       </div>
-                      <DottedSepartor className="py-7" />
+                      <DottedSeparator className="py-7" />
                       <div className="flex items-center justify-between">
                           <Button
                               type="button"

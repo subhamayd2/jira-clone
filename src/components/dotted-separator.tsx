@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-interface IDottedSepartorProps {
+interface IDottedSeparatorProps {
     className?: string;
     color?: string;
     height?: string;
@@ -9,14 +9,14 @@ interface IDottedSepartorProps {
     direction?: 'horizontal' | 'vertical';
 }
 
-function DottedSepartor({
+function DottedSeparator({
   className,
   color = '#d4d4d8',
   height = '2px',
   dotSize = '2px',
   gapSize = '6px',
   direction = 'horizontal',
-}: IDottedSepartorProps) {
+}: IDottedSeparatorProps) {
   const isHorizontal = direction === 'horizontal';
   return (
       <div className={cn(isHorizontal ? 'w-full flex items-center' : 'h-full flex flex-col items-center', className)}>
@@ -37,4 +37,4 @@ function DottedSepartor({
   );
 }
 
-export default DottedSepartor;
+export default DottedSeparator;

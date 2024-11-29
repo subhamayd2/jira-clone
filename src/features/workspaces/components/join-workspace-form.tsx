@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from '@/components/ui/card';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import useJoinWorkspace from '@/features/workspaces/api/use-join-workspace';
 import useInviteCode from '@/features/workspaces/hooks/use-invite-code';
@@ -47,7 +47,7 @@ const JoinWorkspaceForm = ({ initialValues: { name, imageUrl } }: IJoinWorkspace
               </CardDescription>
           </CardHeader>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7">
               <div className="flex items-center flex-col lg:flex-row gap-2 justify-between">

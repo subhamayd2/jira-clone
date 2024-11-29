@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import z from 'zod';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
   Card, CardContent, CardHeader, CardTitle,
@@ -45,7 +45,7 @@ function SignInCard() {
               </CardTitle>
           </CardHeader>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7">
               <Form {...form}>
@@ -87,7 +87,7 @@ function SignInCard() {
               </Form>
           </CardContent>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7 flex flex-col gap-y-4">
               <Button variant="secondary" size="lg" className="w-full" disabled={isPending} icon={<FcGoogle className="mr-2 size-5" />}>
@@ -98,7 +98,7 @@ function SignInCard() {
               </Button>
           </CardContent>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7 flex items-center justify-center">
               <p>Don&apos;t have an account?&nbsp;

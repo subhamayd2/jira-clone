@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { Query } from 'node-appwrite';
+import { Models, Query } from 'node-appwrite';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { sessionMiddleware } from '@/lib/session-middleware';
@@ -30,8 +30,8 @@ const membersRoute = new Hono()
       members.documents.map(async (m) => {
         const u = await users.get(m.userId);
         return {
-          ...m, name: u.name, email: u.email, self: m.userId === user.$id,
-        };
+          ...m, name: u.name, email: u.email, self: m.userId === user.$id, role: m.role,
+        } as unknown as Models.User<Models.Preferences> & { self: boolean; role: MemberRole };
       }),
     );
 

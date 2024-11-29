@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import DottedSepartor from './dotted-separator';
+import { Suspense } from 'react';
+import DottedSeparator from './dotted-separator';
 import LogoTitle from './logo-title';
 import Navigation from './navigation';
 import WorkspaceSwitcher from './workspace-switcher';
@@ -9,9 +10,11 @@ export const Sidebar = () => (
         <Link href="/">
             <LogoTitle />
         </Link>
-        <DottedSepartor className="my-4" />
-        <WorkspaceSwitcher />
-        <DottedSepartor className="my-4" />
+        <DottedSeparator className="my-4" />
+        <Suspense fallback={null}>
+            <WorkspaceSwitcher />
+        </Suspense>
+        <DottedSeparator className="my-4" />
         <Navigation />
     </aside>
 );

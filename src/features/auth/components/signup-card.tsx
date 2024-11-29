@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import DottedSepartor from '@/components/dotted-separator';
+import DottedSeparator from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
@@ -45,7 +45,7 @@ function SignUpCard() {
               </CardDescription>
           </CardHeader>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7">
               <Form {...form}>
@@ -103,7 +103,7 @@ function SignUpCard() {
               </Form>
           </CardContent>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7 flex flex-col gap-y-4">
               <Button variant="secondary" size="lg" className="w-full" disabled={isPending} icon={<FcGoogle className="mr-2 size-5" />}>
@@ -114,7 +114,7 @@ function SignUpCard() {
               </Button>
           </CardContent>
           <div className="px-7">
-              <DottedSepartor />
+              <DottedSeparator />
           </div>
           <CardContent className="p-7 flex items-center justify-center">
               <p>Already have an account?&nbsp;
