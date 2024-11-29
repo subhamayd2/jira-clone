@@ -1,30 +1,16 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import {
-  Account, Client, Databases, Query,
+  Query,
 } from 'node-appwrite';
-import { AUTH_COOKIE } from '@/features/auth/contants';
 import { DATABASE_ID, MEMBERS_ID, WORKSPACES_ID } from '@/config';
 import { getMember } from '@/features/members/utils';
+import { createSessionClient } from '@/lib/appwrite';
 import { Workspace } from './types';
 
 export const getWorkspaces = async () => {
   try {
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
-
-    const session = cookies().get(AUTH_COOKIE);
-
-    if (!session) {
-      return { total: 0, documents: [] };
-    }
-
-    client.setSession(session.value);
-
-    const databases = new Databases(client);
-    const account = new Account(client);
+    const { account, databases } = await createSessionClient();
 
     const user = await account.get();
 
@@ -50,26 +36,14 @@ export const getWorkspaces = async () => {
   }
 };
 
-interface IWorkspaceProps {
+interface IWorkspaceInfoProps {
   workspaceId: string
 }
 
-export const getWorkspace = async ({ workspaceId }: IWorkspaceProps) => {
+export const getWorkspace = async ({ workspaceId }: IWorkspaceInfoProps) => {
   try {
-    const client = new Client()
-      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+    const { account, databases } = await createSessionClient();
 
-    const session = cookies().get(AUTH_COOKIE);
-
-    if (!session) {
-      return null;
-    }
-
-    client.setSession(session.value);
-
-    const databases = new Databases(client);
-    const account = new Account(client);
     const user = await account.get();
 
     const member = await getMember({ databases, workspaceId, userId: user.$id });
@@ -80,6 +54,26 @@ export const getWorkspace = async ({ workspaceId }: IWorkspaceProps) => {
     const workspace = await databases.getDocument<Workspace>(DATABASE_ID, WORKSPACES_ID, workspaceId);
 
     return workspace;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+interface IWorkspaceInfoProps {
+    workspaceId: string
+  }
+
+export const getWorkspaceInfo = async ({ workspaceId }: IWorkspaceInfoProps) => {
+  try {
+    const { databases } = await createSessionClient();
+
+    const workspace = await databases.getDocument<Workspace>(DATABASE_ID, WORKSPACES_ID, workspaceId);
+
+    return {
+      name: workspace.name,
+      imageUrl: workspace.imageUrl,
+    };
   } catch (e) {
     console.error(e);
     return null;

@@ -1,6 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { ID, Query } from 'node-appwrite';
+import { z } from 'zod';
 import { sessionMiddleware } from '@/lib/session-middleware';
 import { createWorkspaceSchema, updateWorkspaceSchema } from '@/features/workspaces/schemas';
 import {
@@ -9,6 +10,7 @@ import {
 import { MemberRole } from '@/features/members/types';
 import { generateInviteCode } from '@/lib/utils';
 import { getMember } from '@/features/members/utils';
+import { Workspace } from '@/features/workspaces/types';
 
 const workspacesRoute = new Hono()
   .get('/', sessionMiddleware, async (context) => {
@@ -92,6 +94,68 @@ const workspacesRoute = new Hono()
     const workspace = await databases.updateDocument(DATABASE_ID, WORKSPACES_ID, workspaceId, {
       name,
       imageUrl: uploadedImageUrl,
+    });
+
+    return context.json({ data: workspace });
+  })
+  .delete('/:workspaceId', sessionMiddleware, async (context) => {
+    const databases = context.get('databases');
+    const user = context.get('user');
+
+    const { workspaceId } = context.req.param();
+
+    const member = await getMember({ databases, workspaceId, userId: user.$id });
+    if (!member || member.role !== MemberRole.ADMIN) {
+      return context.json({ message: 'You are not authorized to delete this workspace' }, 401);
+    }
+
+    // TODO: delete members, projects & tasks
+    await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
+
+    return context.json({ data: { $id: workspaceId } });
+  })
+  .post('/:workspaceId/reset-invite-code', sessionMiddleware, async (context) => {
+    const databases = context.get('databases');
+    const user = context.get('user');
+
+    const { workspaceId } = context.req.param();
+
+    const member = await getMember({ databases, workspaceId, userId: user.$id });
+    if (!member || member.role !== MemberRole.ADMIN) {
+      return context.json({ message: 'You are not authorized to reset invite code' }, 401);
+    }
+
+    const workspace = await databases.updateDocument(DATABASE_ID, WORKSPACES_ID, workspaceId, {
+      inviteCode: generateInviteCode(6),
+    });
+
+    return context.json({ data: workspace });
+  })
+  .post('/:workspaceId/join', sessionMiddleware, zValidator('json', z.object({ code: z.string() })), async (context) => {
+    const { workspaceId } = context.req.param();
+    const { code } = context.req.valid('json');
+
+    const databases = context.get('databases');
+    const user = context.get('user');
+    const member = await getMember({ databases, workspaceId, userId: user.$id });
+
+    if (member) {
+      return context.json({ message: 'Already a member of this workspace' }, 400);
+    }
+
+    const workspace = await databases.getDocument<Workspace>(DATABASE_ID, WORKSPACES_ID, workspaceId);
+    if (!workspace) {
+      return context.json({ message: 'Workspace not found' }, 404);
+    }
+
+    if (workspace.inviteCode !== code) {
+      return context.json({ message: 'Invalid invite code' }, 400);
+    }
+
+    await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
+      workspaceId,
+      userId: user.$id,
+      role: MemberRole.MEMBER,
     });
 
     return context.json({ data: workspace });

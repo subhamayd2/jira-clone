@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/features/auth/actions';
+import { getCurrentUser } from '@/features/auth/queries';
 import CreateWorkspaceForm from '@/features/workspaces/components/create-workspace-form';
 
 const WorkspaceCreatePage = async () => {
