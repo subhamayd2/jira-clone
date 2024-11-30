@@ -8,7 +8,7 @@ import {
   DATABASE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID,
 } from '@/config';
 import { createTaskSchema } from '@/features/tasks/schemas';
-import { TaskStatus } from '@/features/tasks/types';
+import { Task, TaskStatus } from '@/features/tasks/types';
 import { createAdminClient } from '@/lib/appwrite';
 import { Project } from '@/features/projects/types';
 
@@ -73,7 +73,7 @@ const tasksRoute = new Hono()
         query.push(Query.equal('dueDate', dueDate));
       }
 
-      const tasks = await databases.listDocuments(DATABASE_ID, TASKS_ID, query);
+      const tasks = await databases.listDocuments<Task>(DATABASE_ID, TASKS_ID, query);
 
       const projectIds: Array<string> = [];
       const assigneeIds: Array<string> = [];

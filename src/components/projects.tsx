@@ -16,8 +16,6 @@ const Projects = () => {
   const pathname = usePathname();
   const { data: projects, isLoading } = useGetProjects({ workspaceId });
 
-  console.log({ projects, isLoading });
-
   return (
       <div className="flex flex-col gap-y-2">
           <div className="flex items-center justify-between">

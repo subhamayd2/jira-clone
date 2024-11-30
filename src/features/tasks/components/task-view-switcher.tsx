@@ -2,6 +2,7 @@
 
 import { Loader, PlusIcon } from 'lucide-react';
 import { useQueryState } from 'nuqs';
+import { format } from 'date-fns';
 import DottedSeparator from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +11,8 @@ import {
 import { useGetTasks } from '@/features/tasks/api/use-get-tasks';
 import useCreateTaskModal from '@/features/tasks/hooks/use-create-task-modal';
 import useWorkspaceId from '@/features/workspaces/hooks/use-workspace-id';
+import DataFilters from '@/features/tasks/components/data-filters';
+import { Task } from '@/features/tasks/types';
 
 const TaskViewSwitcher = () => {
   const [view, setView] = useQueryState(
@@ -22,8 +25,6 @@ const TaskViewSwitcher = () => {
   const workspaceId = useWorkspaceId();
   //   const projectId = useProjectId();
   const { data: tasks, isLoading: loadingTasks } = useGetTasks({ workspaceId });
-
-  console.table(tasks?.documents);
 
   return (
       <Tabs className="flex-1 w-full border rounded-lg" defaultValue={view} onValueChange={setView}>
@@ -50,19 +51,20 @@ const TaskViewSwitcher = () => {
                   </Button>
               </div>
               <DottedSeparator className="my-4" />
-              Data filters
+              <DataFilters />
               <DottedSeparator className="my-4" />
 
               {loadingTasks
                 ? (
-                    <div className="flex items-center justify-center w-full h-full">
-                        <Loader className="size-4 animate-spin text-muted-foreground" />
+                    <div className="flex flex-col items-center justify-center w-full h-[200px] border rounded-lg">
+                        <Loader className="size-5 animate-spin text-muted-foreground" />
                     </div>
-                )
-                : (
+                ) : (
                     <>
                         <TabsContent value="table">
-                            Table
+                            {tasks?.documents.map((task: Task) => (
+                                <p>{task.name} {task.status} {task.assignee.name} {format(task.dueDate, 'PPP')}</p>
+                            ))}
                         </TabsContent>
                         <TabsContent value="kanban">
                             Kanban
