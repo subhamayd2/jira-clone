@@ -35,7 +35,7 @@ export const getWorkspaces = async () => {
     return workspaces;
   } catch (e) {
     console.error(e);
-    return { total: 0, documents: [] };
+    throw new Error('Failed to get workspaces');
   }
 };
 
@@ -52,7 +52,7 @@ export const getWorkspace = async ({ workspaceId }: IWorkspaceInfoProps) => {
 
     const member = await getMember({ databases, workspaceId, userId: user.$id });
     if (!member) {
-      return null;
+      throw new Error('You are not a member of this workspace');
     }
 
     const workspace = await databases.getDocument<Workspace>(DATABASE_ID, WORKSPACES_ID, workspaceId);
@@ -60,7 +60,7 @@ export const getWorkspace = async ({ workspaceId }: IWorkspaceInfoProps) => {
     return workspace;
   } catch (e) {
     console.error(e);
-    return null;
+    throw new Error('Failed to get workspace');
   }
 };
 
@@ -81,6 +81,6 @@ export const getWorkspaceInfo = async ({ workspaceId }: IWorkspaceInfoProps) => 
     };
   } catch (e) {
     console.error(e);
-    return null;
+    throw new Error('Failed to get workspace info');
   }
 };
