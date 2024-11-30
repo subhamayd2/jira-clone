@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { RiAddCircleFill } from 'react-icons/ri';
+import { Loader } from 'lucide-react';
 import { useGetProjects } from '@/features/projects/api/use-get-projects';
 import useCreateProjectModal from '@/features/projects/hooks/use-create-project-modal';
 import useWorkspaceId from '@/features/workspaces/hooks/use-workspace-id';
@@ -13,7 +14,9 @@ const Projects = () => {
   const { open } = useCreateProjectModal();
   const workspaceId = useWorkspaceId();
   const pathname = usePathname();
-  const { data: projects } = useGetProjects({ workspaceId });
+  const { data: projects, isLoading } = useGetProjects({ workspaceId });
+
+  console.log({ projects, isLoading });
 
   return (
       <div className="flex flex-col gap-y-2">
@@ -21,7 +24,11 @@ const Projects = () => {
               <p className="text-xs uppercase text-neutral-500">Projects</p>
               <RiAddCircleFill className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" onClick={open} />
           </div>
-          {projects?.documents.map((project) => {
+          {isLoading ? (
+              <div className="w-full h-full flex items-center justify-center">
+                  <Loader className="size-6 animate-spin text-muted-foreground" />
+              </div>
+          ) : projects?.documents.map((project) => {
             const href = `/workspaces/${workspaceId}/projects/${project.$id}`;
             const isActive = pathname === href;
             return (
