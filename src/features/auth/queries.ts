@@ -6,6 +6,7 @@ import { AUTH_COOKIE } from './contants';
 
 export const getCurrentUser = async () => {
   const cookiesData = cookies().get(AUTH_COOKIE);
+  console.log({ cookiesData });
   try {
     const { account } = await createSessionClient({ cookie: () => cookiesData });
 
