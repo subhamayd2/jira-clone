@@ -125,6 +125,39 @@ const tasksRoute = new Hono()
       });
     },
   )
+  .get('/:taskId', sessionMiddleware, async (context) => {
+    const databases = context.get('databases');
+    const currentUser = context.get('user');
+    const { users } = await createAdminClient();
+
+    const { taskId } = context.req.param();
+
+    const task = await databases.getDocument<Task>(DATABASE_ID, TASKS_ID, taskId);
+
+    const currentMember = await getMember({ databases, workspaceId: task.workspaceId, userId: currentUser.$id });
+    if (!currentMember) {
+      return context.json({ message: 'You are not a member of this workspace' }, 401);
+    }
+
+    const project = await databases.getDocument<Project>(DATABASE_ID, PROJECTS_ID, task.projectId);
+    const member = await databases.getDocument(DATABASE_ID, MEMBERS_ID, task.assigneeId);
+
+    const user = await users.get(member.userId);
+
+    const assignee = {
+      ...member,
+      name: user.name,
+      email: user.email,
+    };
+
+    return context.json({
+      data: {
+        ...task,
+        project,
+        assignee,
+      },
+    });
+  })
   .post('/', sessionMiddleware, zValidator('json', createTaskSchema), async (context) => {
     const user = context.get('user');
     const databases = context.get('databases');
@@ -163,6 +196,56 @@ const tasksRoute = new Hono()
       status,
       description,
       position: newPosition,
+    });
+
+    return context.json({ data: task });
+  })
+  .delete('/:taskId', sessionMiddleware, async (context) => {
+    const databases = context.get('databases');
+    const user = context.get('user');
+
+    const { taskId } = context.req.param();
+
+    const task = await databases.getDocument<Task>(DATABASE_ID, TASKS_ID, taskId);
+
+    const member = await getMember({ databases, workspaceId: task.workspaceId, userId: user.$id });
+    if (!member) {
+      return context.json({ message: 'You are not a member of this workspace' }, 401);
+    }
+
+    await databases.deleteDocument(DATABASE_ID, TASKS_ID, taskId);
+
+    return context.json({ data: { $id: task.$id } });
+  })
+  .patch('/:taskId', sessionMiddleware, zValidator('json', createTaskSchema.partial()), async (context) => {
+    const user = context.get('user');
+    const databases = context.get('databases');
+
+    const {
+      name,
+      projectId,
+      dueDate,
+      assigneeId,
+      status,
+      description,
+    } = context.req.valid('json');
+
+    const { taskId } = context.req.param();
+
+    const existingTask = await databases.getDocument<Task>(DATABASE_ID, TASKS_ID, taskId);
+
+    const member = await getMember({ databases, workspaceId: existingTask.workspaceId, userId: user.$id });
+    if (!member) {
+      return context.json({ message: 'You are not a member of this workspace' }, 401);
+    }
+
+    const task = await databases.updateDocument(DATABASE_ID, TASKS_ID, taskId, {
+      name,
+      projectId,
+      dueDate,
+      assigneeId,
+      status,
+      description,
     });
 
     return context.json({ data: task });

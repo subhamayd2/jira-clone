@@ -2,19 +2,30 @@
 
 import { Loader, PlusIcon } from 'lucide-react';
 import { useQueryState } from 'nuqs';
-import { format } from 'date-fns';
 import DottedSeparator from '@/components/dotted-separator';
 import { Button } from '@/components/ui/button';
 import {
   Tabs, TabsContent, TabsList, TabsTrigger,
 } from '@/components/ui/tabs';
 import { useGetTasks } from '@/features/tasks/api/use-get-tasks';
-import useCreateTaskModal from '@/features/tasks/hooks/use-create-task-modal';
-import useWorkspaceId from '@/features/workspaces/hooks/use-workspace-id';
 import DataFilters from '@/features/tasks/components/data-filters';
-import { Task } from '@/features/tasks/types';
+import useTaskFilters from '@/features/tasks/hooks/use-task-filters';
+import useWorkspaceId from '@/features/workspaces/hooks/use-workspace-id';
+import useCreateTaskModal from '@/features/tasks/hooks/use-create-task-modal';
+import taskColumns from './columns';
+import DataKanban from './data-kanban';
+import DataTable from './data-table';
 
 const TaskViewSwitcher = () => {
+  const [
+    {
+      projectId,
+      status,
+      assigneeId,
+      dueDate,
+    },
+  ] = useTaskFilters();
+
   const [view, setView] = useQueryState(
     'task-view',
     {
@@ -23,8 +34,13 @@ const TaskViewSwitcher = () => {
   );
   const { open } = useCreateTaskModal();
   const workspaceId = useWorkspaceId();
-  //   const projectId = useProjectId();
-  const { data: tasks, isLoading: loadingTasks } = useGetTasks({ workspaceId });
+  const { data: tasks, isLoading: loadingTasks } = useGetTasks({
+    workspaceId,
+    projectId,
+    assigneeId,
+    dueDate,
+    status,
+  });
 
   return (
       <Tabs className="flex-1 w-full border rounded-lg" defaultValue={view} onValueChange={setView}>
@@ -62,12 +78,10 @@ const TaskViewSwitcher = () => {
                 ) : (
                     <>
                         <TabsContent value="table">
-                            {tasks?.documents.map((task: Task) => (
-                                <p>{task.name} {task.status} {task.assignee.name} {format(task.dueDate, 'PPP')}</p>
-                            ))}
+                            <DataTable columns={taskColumns} data={(tasks?.documents ?? [])} />
                         </TabsContent>
                         <TabsContent value="kanban">
-                            Kanban
+                            <DataKanban data={tasks?.documents ?? []} />
                         </TabsContent>
                         <TabsContent value="calendar">
                             Calendar

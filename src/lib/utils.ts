@@ -71,3 +71,8 @@ const twCharColorMap = {
 };
 
 export const getColorForAvatar = (char: string) => twCharColorMap[char as keyof typeof twCharColorMap];
+
+export const snakeCaseToTitleCase = (value: string) => value
+  .toLowerCase()
+  .replace(/_/g, ' ')
+  .replace(/\b\w/g, (char) => char.toUpperCase());

@@ -2,7 +2,7 @@
 
 import { Calendar as CalendarIcon } from 'lucide-react';
 
-import React from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import {
   format, isAfter, isBefore, startOfDay,
 } from 'date-fns';
@@ -20,13 +20,14 @@ interface IDatePickerProps {
     disableFuture?: boolean;
 }
 
-const DatePicker = ({
+const DatePicker = forwardRef(({
   value, onChange, className, placeholder = 'Select Date',
   disablePast, disableFuture,
-}: IDatePickerProps) => (
+}: IDatePickerProps, ref: ForwardedRef<HTMLButtonElement>) => (
     <Popover>
         <PopoverTrigger asChild>
             <Button
+                ref={ref}
                 variant="outline"
                 size="lg"
                 icon={<CalendarIcon className="size-4" />}
@@ -53,6 +54,6 @@ const DatePicker = ({
             />
         </PopoverContent>
     </Popover>
-);
+));
 
 export default DatePicker;
