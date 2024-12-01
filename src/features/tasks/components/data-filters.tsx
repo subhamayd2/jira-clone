@@ -36,7 +36,7 @@ const DataFilters = ({ hideProjectFilter }: IDataFiltersProps) => {
     status,
     assigneeId,
     dueDate,
-    search,
+    // search,
   } = filters;
 
   const onStatusChange = (value:string) => {
